@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Adidas Stan Smith 2024 - Hoàng Huynh Shoes</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============ TEMPLATE PRODUCT PAGE (v1.0) ============ */
+      .breadcrumb {
+        padding: 15px 60px;
+        background: #fff;
+        font-size: 14px;
+      }
+      .breadcrumb a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+      .product-detail {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+        padding: 40px 60px;
+        background: #fafafa;
+        border-radius: 10px;
+      }
+      .product-images {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+      .product-images img {
+        width: 100%;
+        max-width: 420px;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+      }
+      .product-images img:hover {
+        transform: scale(1.05);
+      }
+      .product-info {
+        flex: 1;
+        background: #fff;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .product-title {
+        font-size: 28px;
+        color: #111;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #e63946;
+        padding-bottom: 8px;
+        width: fit-content;
+      }
+      .price {
+        color: #e63946;
+        font-size: 26px;
+        font-weight: 700;
+        margin: 10px 0;
+      }
+      .price del {
+        color: #777;
+        font-size: 16px;
+        margin-left: 8px;
+      }
+      .installment {
+        color: #0066cc;
+        font-size: 15px;
+        margin-bottom: 20px;
+      }
+      .add-to-cart {
+        background: #e63946;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .add-to-cart:hover {
+        background: #d00000;
+        transform: scale(1.05);
+      }
+      .section-box {
+        margin-top: 30px;
+        padding: 15px;
+        background: #f7f7f7;
+        border-radius: 8px;
+      }
+      .section-box h3 {
+        color: #111;
+        font-size: 20px;
+        margin-bottom: 10px;
+        border-left: 5px solid #e63946;
+        padding-left: 10px;
+      }
+      .section-box p {
+        font-size: 15px;
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+      .section-box ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      .section-box ul li {
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 6px;
+      }
+      .section-box ul li strong {
+        width: 120px;
+        display: inline-block;
+        color: #111;
+      }
+      @media (max-width: 900px) {
+        .product-detail {
+          flex-direction: column;
+          padding: 20px;
+        }
+        .breadcrumb {
+          padding: 12px 20px;
+        }
+      }
+      /* ======================================================= */
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="logo"><a href="index.html">Hoàng Huynh Shoes 👟</a></div>
+      <div class="user-cart">
+        <a href="login.html" class="login-icon">Đăng nhập</a>
+        <a href="cart.html" class="cart-icon">Giỏ hàng</a>
+      </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="index.html">Trang chủ</a> /
+      <a id="brandLink" href="#">Adidas</a> /
+      <span id="crumbName">Adidas Stan Smith 2024</span>
+    </div>
+
+    <!-- Product Detail -->
+    <div class="product-detail">
+      <div class="product-images">
+        <img id="productImage" src="" alt="" />
+      </div>
+
+      <div class="product-info">
+        <h1 id="productTitle" class="product-title"></h1>
+        <p class="price">
+          <span id="productPrice"></span> <del id="productOldPrice"></del>
+        </p>
+        <p id="installment" class="installment"></p>
+        <button class="add-to-cart">🛒 Thêm vào giỏ hàng</button>
+
+        <div class="section-box">
+          <h3>Mô tả sản phẩm</h3>
+          <p id="productDesc"></p>
+        </div>
+
+        <div class="section-box">
+          <h3>Thông số kỹ thuật</h3>
+          <ul>
+            <li><strong>Thương hiệu:</strong> <span id="specBrand"></span></li>
+            <li><strong>Kiểu dáng:</strong> <span id="specStyle"></span></li>
+            <li><strong>Chất liệu:</strong> <span id="specMaterial"></span></li>
+            <li><strong>Màu sắc:</strong> <span id="specColor"></span></li>
+            <li><strong>Size:</strong> <span id="specSize"></span></li>
+            <li><strong>Bảo hành:</strong> <span id="specWarranty"></span></li>
+            <li><strong>Giới tính:</strong> <span id="specGender"></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>
+        Hoàng Huynh Shoes © 2025 | Hotline: 0987 838 186 | Email:
+        support@hoanghuynh.vn
+      </p>
+    </div>
+
+    <!-- JS CONFIG -->
+    <script>
+      const PRODUCT = {
+        id: 10,
+        name: "Adidas Stan Smith 2024",
+        brand: "Adidas",
+        price: 2590000,
+        oldPrice: 2990000,
+        image:
+          "https://authentic-shoes.com/wp-content/uploads/2024/06/Giay-Adidas-Wmns-Stan-Smith-Valentines-Day-2024-IG8482-1.png",
+        installment: "💥 Mua 1 tặng 1 dây giày – Freeship toàn quốc",
+        desc: "Adidas Stan Smith 2024 là biểu tượng tối giản của phong cách thanh lịch. Thân giày da mềm, form slim-fit, phối xanh lá kinh điển, phù hợp với mọi trang phục hàng ngày.",
+        spec: {
+          style: "Sneaker / Lifestyle",
+          material: "Da tổng hợp thân thiện môi trường",
+          color: "Trắng – Xanh lá",
+          size: "36 – 44",
+          warranty: "12 tháng",
+          gender: "Unisex",
+        },
+      };
+
+      const $ = (id) => document.getElementById(id);
+      const formatVND = (n) => n.toLocaleString("vi-VN") + "đ";
+      $("productTitle").textContent = PRODUCT.name;
+      $("crumbName").textContent = PRODUCT.name;
+      $("brandLink").textContent = PRODUCT.brand;
+      $("productImage").src = PRODUCT.image;
+      $("productPrice").textContent = formatVND(PRODUCT.price);
+      $("productOldPrice").textContent = formatVND(PRODUCT.oldPrice);
+      $("installment").textContent = PRODUCT.installment;
+      $("productDesc").textContent = PRODUCT.desc;
+      $("specBrand").textContent = PRODUCT.brand;
+      $("specStyle").textContent = PRODUCT.spec.style;
+      $("specMaterial").textContent = PRODUCT.spec.material;
+      $("specColor").textContent = PRODUCT.spec.color;
+      $("specSize").textContent = PRODUCT.spec.size;
+      $("specWarranty").textContent = PRODUCT.spec.warranty;
+      $("specGender").textContent = PRODUCT.spec.gender;
+
+      document.querySelector(".add-to-cart").addEventListener("click", () => {
+        const user = localStorage.getItem("userLogin");
+        if (!user)
+          return alert("⚠️ Bạn chưa đăng nhập. Hãy đăng nhập để lưu giỏ hàng!");
+        const cartKey = `cart_${user}`;
+        const cart = JSON.parse(localStorage.getItem(cartKey) || "[]");
+        if (cart.find((i) => i.id === PRODUCT.id))
+          return alert("✅ Sản phẩm này đã có trong giỏ hàng!");
+        cart.push({
+          id: PRODUCT.id,
+          name: PRODUCT.name,
+          price: PRODUCT.price,
+          image: PRODUCT.image,
+        });
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        alert("🛒 Đã thêm vào giỏ hàng!");
+      });
+    </script>
+  </body>
+  <script src="main.js"></script>
+</html>

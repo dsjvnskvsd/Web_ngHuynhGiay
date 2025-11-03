@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Giỏ hàng - Hoàng Huynh Shoes 👟</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: #f9f9f9;
+      }
+      .cart-container {
+        width: 90%;
+        max-width: 1000px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #e63946;
+        margin-bottom: 25px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: center;
+      }
+      th {
+        background: #e63946;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background: #f6f6f6;
+      }
+      .product-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      .remove-btn {
+        background: #ff5555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .remove-btn:hover {
+        background: #d00000;
+      }
+      .checkout {
+        margin-top: 20px;
+        text-align: right;
+      }
+      .checkout button {
+        background: #2a9d8f;
+        color: #fff;
+        padding: 12px 24px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .checkout button:hover {
+        background: #21867a;
+      }
+      .total {
+        font-weight: 600;
+        color: #e63946;
+        font-size: 18px;
+        margin-right: 20px;
+      }
+      .empty {
+        text-align: center;
+        font-size: 18px;
+        color: #777;
+        padding: 40px 0;
+      }
+
+      /* Popup chọn ngân hàng */
+      .bank-popup {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+      .bank-popup.active {
+        display: flex;
+      }
+      .bank-box {
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        width: 400px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+      .bank-box select,
+      .bank-box button {
+        margin-top: 15px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+      }
+      .bank-info {
+        margin-top: 15px;
+        background: #f7f7f7;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: left;
+      }
+      .bank-info p {
+        margin: 6px 0;
+        font-size: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <a href="index.html">Hoàng Huynh Shoes 👟</a>
+      </div>
+      <div id="userSection"></div>
+    </div>
+
+    <div class="cart-container">
+      <h1>🛒 Giỏ hàng của bạn</h1>
+      <div id="cartContent"></div>
+    </div>
+
+    <!-- Popup chọn ngân hàng -->
+    <div class="bank-popup" id="bankPopup">
+      <div class="bank-box">
+        <h3>Chọn ngân hàng để thanh toán</h3>
+        <select id="bankSelect">
+          <option value="">-- Chọn ngân hàng --</option>
+          <option value="VCB">Vietcombank</option>
+          <option value="TPB">TPBank</option>
+          <option value="MB">MB Bank</option>
+          <option value="ACB">ACB</option>
+          <option value="BIDV">BIDV</option>
+        </select>
+        <div class="bank-info" id="bankInfo"></div>
+        <button onclick="closeBank()">Đóng</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Hoàng Huynh Shoes © 2025 | Hotline: 0987 838 186</p>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+      const userData = JSON.parse(localStorage.getItem("currentUser") || "null");
+      const cartContent = document.getElementById("cartContent");
+      const bankPopup = document.getElementById("bankPopup");
+      const bankSelect = document.getElementById("bankSelect");
+      const bankInfo = document.getElementById("bankInfo");
+
+      if (!userData) {
+        cartContent.innerHTML = `<p class="empty">⚠️ Bạn chưa đăng nhập.<br>Vui lòng <a href="login.html">đăng nhập</a> để xem giỏ hàng.</p>`;
+      } else {
+        const key = "cart_" + userData.username;
+        const cart = JSON.parse(localStorage.getItem(key) || "[]");
+        if (cart.length === 0) {
+          cartContent.innerHTML = '<p class="empty">🛍️ Giỏ hàng trống.</p>';
+        } else {
+          let total = 0;
+          let html = `
+            <table>
+              <tr><th>Ảnh</th><th>Tên sản phẩm</th><th>Giá</th><th>Xóa</th></tr>`;
+          cart.forEach((p, i) => {
+            total += p.price;
+            html += `
+              <tr>
+                <td><img src="${p.image}" class="product-img"></td>
+                <td>${p.name}</td>
+                <td>${p.price.toLocaleString("vi-VN")}đ</td>
+                <td><button class="remove-btn" onclick="removeItem(${i})">Xóa</button></td>
+              </tr>`;
+          });
+          html += `</table>
+            <div class="checkout">
+              <span class="total">Tổng: ${total.toLocaleString("vi-VN")}đ</span>
+              <button onclick="openBank()">Thanh toán</button>
+            </div>`;
+          cartContent.innerHTML = html;
+        }
+      }
+
+      function removeItem(index) {
+        const key = "cart_" + userData.username;
+        const cart = JSON.parse(localStorage.getItem(key) || "[]");
+        cart.splice(index, 1);
+        localStorage.setItem(key, JSON.stringify(cart));
+        location.reload();
+      }
+
+      function openBank() {
+        bankPopup.classList.add("active");
+      }
+      function closeBank() {
+        bankPopup.classList.remove("active");
+      }
+
+      // Hiển thị thông tin ngân hàng
+      bankSelect.addEventListener("change", () => {
+        const bank = bankSelect.value;
+        if (!bank) {
+          bankInfo.innerHTML = "";
+          return;
+        }
+
+        const banks = {
+          VCB: {
+            name: "Vietcombank",
+            stk: "0123456789",
+            chuTK: "HOANG VIET ANH",
+            code: "VCB-HHS-2025",
+          },
+          TPB: {
+            name: "TPBank",
+            stk: "0978881234",
+            chuTK: "HOANG VIET ANH",
+            code: "TPB-HHS-2025",
+          },
+          MB: {
+            name: "MB Bank",
+            stk: "999888777",
+            chuTK: "HOANG VIET ANH",
+            code: "MB-HHS-2025",
+          },
+          ACB: {
+            name: "ACB",
+            stk: "6655443322",
+            chuTK: "HOANG VIET ANH",
+            code: "ACB-HHS-2025",
+          },
+          BIDV: {
+            name: "BIDV",
+            stk: "1122334455",
+            chuTK: "HOANG VIET ANH",
+            code: "BIDV-HHS-2025",
+          },
+        };
+
+        const info = banks[bank];
+        bankInfo.innerHTML = `
+          <p><b>🏦 Ngân hàng:</b> ${info.name}</p>
+          <p><b>Số tài khoản:</b> ${info.stk}</p>
+          <p><b>Chủ tài khoản:</b> ${info.chuTK}</p>
+          <p><b>Mã thanh toán:</b> ${info.code}</p>
+          <button style="margin-top:10px;background:#2a9d8f;color:#fff;border:none;padding:10px 20px;border-radius:6px;"
+            onclick="confirmPay('${info.name}')">Xác nhận thanh toán</button>
+        `;
+      });
+
+      function confirmPay(bankName) {
+        const cartKey = "cart_" + userData.username;
+        const cart = JSON.parse(localStorage.getItem(cartKey) || "[]");
+        const total = cart.reduce((s, p) => s + p.price, 0);
+        const orderCode =
+          "HHS" + new Date().getFullYear() + "-" + Math.floor(Math.random() * 900000 + 100000);
+
+        // Lưu đơn hàng cho admin
+        const orderData = {
+          code: orderCode,
+          time: new Date().toLocaleString(),
+          bank: bankName,
+          total,
+          items: cart,
+        };
+        const key = "orders_" + userData.username;
+        const orders = JSON.parse(localStorage.getItem(key) || "[]");
+        orders.push(orderData);
+        localStorage.setItem(key, JSON.stringify(orders));
+
+        // Xóa giỏ hàng
+        localStorage.removeItem(cartKey);
+
+        alert(
+          "✅ Thanh toán thành công qua " +
+            bankName +
+            "!\n🧾 Mã đơn hàng của bạn: " +
+            orderCode
+        );
+        closeBank();
+        location.reload();
+      }
+    </script>
+  </body>
+</html>

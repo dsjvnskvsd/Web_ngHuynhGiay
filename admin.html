@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard - Hoàng Huynh Shoes 👟</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --accent: #e63946;
+        --ok: #2a9d8f;
+        --bg: #f6f6f6;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--bg);
+        margin: 0;
+        padding: 0;
+      }
+      .topbar {
+        background: linear-gradient(90deg, #3a0b0b, #b92b2b);
+        color: #fff;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .admin-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .admin-actions button {
+        background: #222;
+        color: #fff;
+        border: none;
+        padding: 7px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .admin-actions button:hover {
+        background: #000;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: var(--accent);
+      }
+      .badge-new {
+        background: var(--ok);
+        color: #fff;
+        padding: 3px 8px;
+        border-radius: 8px;
+        margin-left: 6px;
+        font-size: 12px;
+      }
+      .alert {
+        background: #ffcccc;
+        color: #660000;
+        border-radius: 8px;
+        padding: 10px;
+        margin: 10px 0 20px 0;
+        font-weight: 600;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 1px solid #eee;
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+        background: #f3f3f3;
+      }
+      tr:nth-child(even) {
+        background: #fafafa;
+      }
+      .item img {
+        width: 50px;
+        height: 50px;
+        border-radius: 6px;
+        object-fit: cover;
+      }
+      .stat {
+        display: inline-block;
+        margin-right: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 10px 15px;
+        border-left: 5px solid var(--accent);
+      }
+      .stat h3 {
+        margin: 0;
+        color: var(--accent);
+      }
+      .btn {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #c32634;
+      }
+      .btn-delete {
+        background: #d32f2f;
+      }
+      .btn-delete:hover {
+        background: #a90f0f;
+      }
+      .footer {
+        text-align: center;
+        color: #777;
+        margin-top: 30px;
+      }
+      /* Thêm sản phẩm */
+      .add-product {
+        margin-top: 30px;
+        padding: 20px;
+        border-top: 2px dashed #ccc;
+      }
+      .add-product h2 {
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+      .add-product input {
+        width: 100%;
+        padding: 10px;
+        margin: 6px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+      .product-list {
+        margin-top: 15px;
+      }
+      .product-item {
+        border-bottom: 1px solid #eee;
+        padding: 8px 0;
+      }
+      .product-item img {
+        width: 60px;
+        height: 60px;
+        border-radius: 6px;
+        object-fit: cover;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="title">Hoàng Huynh Shoes — Admin Dashboard 👟</div>
+      <div class="admin-actions">
+        <span id="adminName">Admin: <b>admin</b></span>
+        <button id="btnLogout">Đăng xuất</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>📦 Quản lý đơn hàng</h1>
+
+      <div id="alertNew" class="alert hidden">
+        🔔 Có đơn hàng mới chưa xem! Vui lòng kiểm tra bên dưới.
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <h3 id="totalOrders">0</h3>
+          <p>Số đơn hàng</p>
+        </div>
+        <div class="stat">
+          <h3 id="totalRevenue">0đ</h3>
+          <p>Tổng doanh thu</p>
+        </div>
+        <div class="stat">
+          <h3 id="totalUsers">0</h3>
+          <p>Số người mua</p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Người dùng</th>
+            <th>Mã đơn</th>
+            <th>Ngày</th>
+            <th>Ngân hàng</th>
+            <th>Tổng tiền</th>
+            <th>Sản phẩm</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+
+      <!-- Thêm sản phẩm -->
+      <div class="add-product">
+        <h2>➕ Thêm sản phẩm mới</h2>
+        <input id="pName" placeholder="Tên sản phẩm" />
+        <input id="pPrice" type="number" placeholder="Giá (VNĐ)" />
+        <input id="pImage" placeholder="URL hình ảnh sản phẩm" />
+        <button class="btn" onclick="addProduct()">Thêm sản phẩm</button>
+
+        <div class="product-list" id="productList"></div>
+      </div>
+
+      <div class="footer">
+        <p>Hoàng Huynh Shoes © 2025 | Hotline: 0987 838 186</p>
+      </div>
+    </div>
+
+    <script>
+      const ordersBody = document.getElementById("ordersBody");
+      const totalOrdersEl = document.getElementById("totalOrders");
+      const totalRevenueEl = document.getElementById("totalRevenue");
+      const totalUsersEl = document.getElementById("totalUsers");
+      const productList = document.getElementById("productList");
+
+      // ========== Đăng xuất ==========
+      document.getElementById("btnLogout").onclick = () => {
+        localStorage.removeItem("currentUser");
+        alert("👋 Đã đăng xuất khỏi admin!");
+        window.location.href = "login.html";
+      };
+
+      // ========== LOAD ĐƠN HÀNG ==========
+      function loadOrders() {
+        const allOrders = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key.startsWith("orders_")) {
+            const user = key.replace("orders_", "");
+            const arr = JSON.parse(localStorage.getItem(key) || "[]");
+            arr.forEach((o) => allOrders.push({ ...o, user }));
+          }
+        }
+
+        const total = allOrders.length;
+        const revenue = allOrders.reduce((s, o) => s + (o.total || 0), 0);
+        const users = [...new Set(allOrders.map((o) => o.user))];
+
+        totalOrdersEl.textContent = total;
+        totalRevenueEl.textContent = revenue.toLocaleString("vi-VN") + "đ";
+        totalUsersEl.textContent = users.length;
+
+        ordersBody.innerHTML = allOrders
+          .map(
+            (o, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${o.user}</td>
+            <td>${o.code}</td>
+            <td>${o.time}</td>
+            <td>${o.bank}</td>
+            <td style="color:#e63946;font-weight:600;">${o.total.toLocaleString(
+              "vi-VN"
+            )}đ</td>
+            <td>${o.items
+              .map(
+                (it) =>
+                  `<div class="item"><img src="${it.image}" />${it.name}</div>`
+              )
+              .join("")}</td>
+            <td><button class="btn-delete" onclick="deleteOrder('${
+              o.user
+            }','${o.code}')">Xóa</button></td>
+          </tr>`
+          )
+          .join("");
+      }
+
+      function deleteOrder(user, code) {
+        const key = "orders_" + user;
+        const arr = JSON.parse(localStorage.getItem(key) || "[]");
+        const newArr = arr.filter((o) => o.code !== code);
+        localStorage.setItem(key, JSON.stringify(newArr));
+        alert("🗑️ Đã xóa đơn hàng!");
+        loadOrders();
+      }
+
+      // ========== QUẢN LÝ SẢN PHẨM ==========
+      function loadProducts() {
+        const products = JSON.parse(localStorage.getItem("products") || "[]");
+        if (products.length === 0) {
+          productList.innerHTML =
+            "<p style='color:#777;'>Chưa có sản phẩm nào được thêm.</p>";
+          return;
+        }
+        productList.innerHTML = products
+          .map(
+            (p, i) => `
+          <div class="product-item">
+            <img src="${p.image}" />
+            <b>${p.name}</b> — ${Number(p.price).toLocaleString("vi-VN")}đ
+            <button class="btn-delete" onclick="deleteProduct(${i})">Xóa</button>
+          </div>`
+          )
+          .join("");
+      }
+
+      function addProduct() {
+        const name = document.getElementById("pName").value.trim();
+        const price = Number(document.getElementById("pPrice").value);
+        const image = document.getElementById("pImage").value.trim();
+
+        if (!name || !price || !image) {
+          alert("⚠️ Nhập đầy đủ thông tin sản phẩm!");
+          return;
+        }
+
+        const products = JSON.parse(localStorage.getItem("products") || "[]");
+        products.push({ name, price, image });
+        localStorage.setItem("products", JSON.stringify(products));
+
+        alert("✅ Đã thêm sản phẩm mới!");
+        loadProducts();
+        document.getElementById("pName").value =
+          document.getElementById("pPrice").value =
+          document.getElementById("pImage").value =
+            "";
+      }
+
+      function deleteProduct(index) {
+        const products = JSON.parse(localStorage.getItem("products") || "[]");
+        products.splice(index, 1);
+        localStorage.setItem("products", JSON.stringify(products));
+        loadProducts();
+      }
+
+      loadOrders();
+      loadProducts();
+    </script>
+  </body>
+</html>
+  

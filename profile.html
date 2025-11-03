@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Thông tin tài khoản - Hoàng Huynh Shoes 👟</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: #f9f9f9;
+        margin: 0;
+      }
+      .profile-container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+      }
+      h1 {
+        text-align: center;
+        color: #e63946;
+        margin-bottom: 25px;
+      }
+      .info-box {
+        background: #fef3f3;
+        padding: 15px 25px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        border-left: 5px solid #e63946;
+      }
+      .info-box p {
+        font-size: 15px;
+        color: #333;
+        margin: 5px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: center;
+      }
+      th {
+        background: #e63946;
+        color: #fff;
+      }
+      tr:nth-child(even) {
+        background: #f7f7f7;
+      }
+      .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .item img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+      .btn {
+        background: #e63946;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #c92d3b;
+      }
+      .footer {
+        text-align: center;
+        color: #777;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo"><a href="index.html">Hoàng Huynh Shoes 👟</a></div>
+      <div class="user-cart">
+        <a href="cart.html">Giỏ hàng</a> |
+        <a href="#" onclick="logout()" style="color:#e63946;font-weight:600;">Đăng xuất</a>
+      </div>
+    </div>
+
+    <div class="profile-container">
+      <h1>👤 Hồ sơ tài khoản</h1>
+      <div id="profileInfo" class="info-box"></div>
+
+      <h2 style="color:#e63946;">🧾 Lịch sử đơn hàng</h2>
+      <div id="ordersSection"></div>
+    </div>
+
+    <div class="footer">
+      <p>Hoàng Huynh Shoes © 2025 | Hotline: 0987 838 186</p>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+      const user = JSON.parse(localStorage.getItem("currentUser") || "null");
+      const profileInfo = document.getElementById("profileInfo");
+      const ordersSection = document.getElementById("ordersSection");
+
+      if (!user) {
+        alert("⚠️ Bạn cần đăng nhập để xem trang này!");
+        window.location.href = "login.html";
+      } else {
+        profileInfo.innerHTML = `
+          <p><b>Tên đăng nhập:</b> ${user.username}</p>
+          <p><b>Vai trò:</b> ${user.role === "admin" ? "Quản trị viên" : "Khách hàng"}</p>
+        `;
+      }
+
+      // ======= Lịch sử đơn hàng =======
+      const orderKey = "orders_" + user.username;
+      const orders = JSON.parse(localStorage.getItem(orderKey) || "[]");
+
+      if (orders.length === 0) {
+        ordersSection.innerHTML = `<p style="text-align:center;color:#777;font-size:16px;">📭 Bạn chưa có đơn hàng nào.</p>`;
+      } else {
+        let html = `
+          <table>
+            <tr>
+              <th>#</th>
+              <th>Mã đơn</th>
+              <th>Ngày mua</th>
+              <th>Ngân hàng</th>
+              <th>Tổng tiền</th>
+              <th>Sản phẩm</th>
+            </tr>`;
+        orders.reverse().forEach((o, i) => {
+          const items = o.items.map(
+            (it) => `
+              <div class="item">
+                <img src="${it.image}" alt="${it.name}">
+                <span>${it.name}</span>
+              </div>`
+          ).join("");
+          html += `
+            <tr>
+              <td>${i + 1}</td>
+              <td>${o.code}</td>
+              <td>${o.time}</td>
+              <td>${o.bank}</td>
+              <td style="color:#e63946;font-weight:600;">${o.total.toLocaleString("vi-VN")}đ</td>
+              <td>${items}</td>
+            </tr>`;
+        });
+        html += `</table>`;
+        ordersSection.innerHTML = html;
+      }
+
+      function logout() {
+        localStorage.removeItem("currentUser");
+        alert("👋 Bạn đã đăng xuất!");
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>
+    

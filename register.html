@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Đăng ký - Hoàng Huynh Shoes 👟</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #f9a826, #e63946);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .register-box {
+        background: #fff;
+        width: 380px;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+      h2 {
+        margin-bottom: 20px;
+        color: #e63946;
+      }
+      input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #e63946;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      button:hover {
+        background: #c92d3b;
+      }
+      p {
+        margin-top: 15px;
+        font-size: 14px;
+      }
+      a {
+        color: #e63946;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="register-box">
+      <h2>Đăng ký tài khoản mới</h2>
+      <input type="text" id="username" placeholder="Tên đăng nhập" />
+      <input type="password" id="password" placeholder="Mật khẩu" />
+      <button onclick="handleRegister()">Đăng ký</button>
+
+      <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+      <p><a href="index.html">⬅️ Quay lại trang chủ</a></p>
+    </div>
+
+    <!-- Liên kết script -->
+    <script src="main.js" defer></script>
+  </body>
+</html>
